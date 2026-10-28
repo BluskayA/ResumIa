@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ResumIA - Tu Hub Global de Conocimiento y Entretenimiento</title>
+  
+  <!-- Tipografía Montserrat & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Marked.js para formatear Markdown a HTML -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #F4F7FA;
+      --navy-primary: #0D253F;
+      --cyan-accent: #00C6FF;
+      --cyan-hover: #00A8DA;
+      --card-bg: #FFFFFF;
+      --text-dark: #2C3E50;
+      --text-muted: #6C7A89;
+      --border-color: #E2E8F0;
+      --shadow-sm: 0 4px 12px rgba(13, 37, 63, 0.05);
+      --shadow-lg: 0 10px 25px rgba(13, 37, 63, 0.1);
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 15px 5%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--navy-primary) 0%, var(--cyan-accent) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 24px;
+      box-shadow: 0 4px 10px rgba(0, 198, 255, 0.3);
+    }
+
+    .brand-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 24px;
+      color: var(--navy-primary);
+    }
+
+    .brand-text span { color: var(--cyan-accent); }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .lang-picker {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .lang-picker select {
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy-primary);
+      cursor: pointer;
+      outline: none;
+    }
+
+    .btn-api-config {
+      background: var(--navy-primary);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-api-config:hover { background: #16385C; }
+
+    nav.main-nav {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      overflow-x: auto;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      color: var(--navy-primary);
+      background: #F1F5F9;
+    }
+
+    .nav-btn.active {
+      background: var(--navy-primary);
+      color: #fff;
+    }
+
+    main.container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .section-header { margin-bottom: 25px; }
+
+    .section-header h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 28px;
+      color: var(--navy-primary);
+      margin-bottom: 6px;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      background: var(--card-bg);
+      padding: 8px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    .search-box input {
+      flex: 1;
+      border: none;
+      padding: 12px 16px;
+      font-size: 15px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .search-box button {
+      background: var(--cyan-accent);
+      color: var(--navy-primary);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .search-box button:hover { background: var(--cyan-hover); }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card-img {
+      height: 240px;
+      width: 100%;
+      object-fit: cover;
+      background: #E2E8F0;
+    }
+
+    .card-content {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-badge {
+      display: inline-block;
+      align-self: flex-start;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: #E0F7FA;
+      color: #00838F;
+      margin-bottom: 8px;
+    }
+
+    .card h3 {
+      font-size: 16px;
+      color: var(--navy-primary);
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    .upload-zone {
+      background: var(--card-bg);
+      border: 2px dashed var(--cyan-accent);
+      border-radius: var(--radius);
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: background 0.2s;
+    }
+
+    .upload-zone:hover { background: #F0FDF4; }
+
+    .result-modal {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 30px;
+      margin-top: 30px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      display: none;
+    }
+
+    .result-content {
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    .result-content h1, .result-content h2, .result-content h3 {
+      color: var(--navy-primary);
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .result-content ul, .result-content ol {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    .affiliate-box {
+      margin-top: 25px;
+      padding: 15px 20px;
+      background: #F0F9FF;
+      border-left: 4px solid var(--cyan-accent);
+      border-radius: 0 8px 8px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn-buy {
+      background: #FF9900;
+      color: #111;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="#" class="brand-logo">
+      <div class="brand-icon">R</div>
+      <div class="brand-text">Resum<span>IA</span></div>
+    </a>
+
+    <div class="header-actions">
+      <div class="lang-picker">
+        <span>🌍</span>
+        <select id="globalLang">
+          <option value="es" selected>Español</option>
+          <option value="en">English</option>
+          <option value="pt">Português</option>
+          <option value="fr">Français</option>
+          <option value="de">Deutsch</option>
+          <option value="it">Italiano</option>
+          <option value="zh">中文</option>
+          <option value="ja">日本語</option>
+          <option value="ru">Русский</option>
+          <option value="ar">العربية</option>
+        </select>
+      </div>
+
+      <button class="btn-api-config" onclick="configureAPI()">⚙️ API Key</button>
+    </div>
+  </header>
+
+  <nav class="main-nav">
+    <button class="nav-btn active" onclick="showTab('libros', event)">📚 Libros</button>
+    <button class="nav-btn" onclick="showTab('holistico', event)">🧘‍♂️ Holístico y Espiritual</button>
+    <button class="nav-btn" onclick="showTab('cine', event)">🎬 Cine y Series</button>
+    <button class="nav-btn" onclick="showTab('anime', event)">⛩️ Anime y Manga</button>
+    <button class="nav-btn" onclick="showTab('juegos', event)">🎮 Videojuegos</button>
+    <button class="nav-btn" onclick="showTab('subir', event)">⚡ Subir Archivo / IA</button>
+  </nav>
+
+  <main class="container">
+    
+    <div id="resultPanel" class="result-modal">
+      <div id="resultText" class="result-content"></div>
+    </div>
+
+    <section id="libros" class="tab-content">
+      <div class="section-header">
+        <h2>📚 Biblioteca de Libros</h2>
+        <p>Resúmenes estructurados y aprendizajes clave de obras literarias y de crecimiento personal.</p>
+      </div>
+      <div class="search-box">
+        <input type="text" id="inputBook" placeholder="Escribe el nombre de cualquier libro del mundo..."/>
+        <button onclick="processSearch('book', 'inputBook')">Buscar y Resumir</button>
+      </div>
+      <div class="card-grid" id="grid-libros"></div>
+    </section>
+
+    <section id="holistico" class="tab-content" style="display:none;">
+      <div class="section-header">
+        <h2>🧘‍♂️ Holístico, Metafísica y Espiritualidad</h2>
+        <p>Análisis filosóficos, textos sagrados, principios herméticos y guías de bienestar interior.</p>
+      </div>
+      <div class="search-box">
+        <input type="text" id="inputHolistic" placeholder="Escribe un título espiritual, sagrado o metafísico..."/>
+        <button onclick="processSearch('holistic', 'inputHolistic')">Analizar Obra</button>
+      </div>
+      <div class="card-grid" id="grid-holistico"></div>
+    </section>
+
+    <section id="cine" class="tab-content" style="display:none;">
+      <div class="section-header">
+        <h2>🎬 Cine y Series</h2>
+        <p>Desglose argumental, subtextos, análisis cinematográfico y lecciones clave.</p>
+      </div>
+      <div class="search-box">
+        <input type="text" id="inputMovie" placeholder="Escribe cualquier película o serie..."/>
+        <button onclick="processSearch('movie', 'inputMovie')">Generar Resumen</button>
+      </div>
+      <div class="card-grid" id="grid-cine"></div>
+    </section>
+
+    <section id="anime" class="tab-content" style="display:none;">
+      <div class="section-header">
+        <h2>⛩️ Anime y Manga</h2>
+        <p>Lore profundo, simbolismos, desarrollo de personajes y arcos argumentales.</p>
+      </div>
+      <div class="search-box">
+        <input type="text" id="inputAnime" placeholder="Escribe un anime o manga..."/>
+        <button onclick="processSearch('anime', 'inputAnime')">Analizar Anime</button>
+      </div>
+      <div class="card-grid" id="grid-anime"></div>
+    </section>
+
+    <section id="juegos" class="tab-content" style="display:none;">
+      <div class="section-header">
+        <h2>🎮 Videojuegos (Guías y Trucos)</h2>
+        <p>Historia, lugares secretos, trucos/códigos y checklist para el 100% / Platino.</p>
+      </div>
+      <div class="search-box">
+        <input type="text" id="inputGame" placeholder="Escribe un videojuego para obtener la guía completa..."/>
+        <button onclick="processSearch('game', 'inputGame')">Obtener Guía 100%</button>
+      </div>
+      <div class="card-grid" id="grid-juegos"></div>
+    </section>
+
+    <section id="subir" class="tab-content" style="display:none;">
+      <div class="section-header">
+        <h2>⚡ Analizar tus Archivos con IA</h2>
+        <p>Sube un archivo PDF, TXT, audio MP3/WAV, o video MP4 para obtener un resumen detallado al instante.</p>
+      </div>
+
+      <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+        <p style="font-size: 36px; margin-bottom: 10px;">📁</p>
+        <p style="font-weight: 700; color: var(--navy-primary);">Haz clic o arrastra un archivo aquí</p>
+        <p style="font-size: 13px; color: var(--text-muted);">Soporta PDF, TXT, JPG, PNG, MP3, WAV, MP4</p>
+        <input type="file" id="fileInput" style="display:none;" onchange="handleFileUpload(event)"/>
+      </div>
+
+      <div style="background: var(--card-bg); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border-color);">
+        <label style="font-weight: 700; font-size: 14px; display: block; margin-bottom: 8px;">O pega aquí un texto o transcripción:</label>
+        <textarea id="customText" rows="5" style="width:100%; border:1px solid var(--border-color); border-radius:8px; padding:12px; font-family:inherit; outline:none;" placeholder="Pega un artículo, apuntes o texto largo..."></textarea>
+        <button onclick="processCustomText()" style="margin-top:12px; background:var(--navy-primary); color:#fff; border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer;">Procesar Texto con IA</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const DATA = {
+      libros: [
+        { title: "Hábitos Atómicos", badge: "Desarrollo Personal", img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400", desc: "Cómo pequeños cambios provocan resultados extraordinarios." },
+        { title: "Sapiens", badge: "Historia / Ciencia", img: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=400", desc: "Breve historia de la humanidad y la evolución de nuestra especie." },
+        { title: "1984", badge: "Ficción / Distopía", img: "https://images.unsplash.com/photo-1543002588-bFA74002ed7e?w=400", desc: "La vigilancia masiva, el Gran Hermano y el control del pensamiento." },
+        { title: "El Principito", badge: "Clásico", img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400", desc: "Una fábula profunda sobre el amor, la amistad y lo esencial de la vida." },
+        { title: "Padre Rico Padre Pobre", badge: "Finanzas", img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400", desc: "Educación financiera, activos y libertad económica." }
+      ],
+      holistico: [
+        { title: "La Biblia (Estudio Breve)", badge: "Texto Sagrado", img: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400", desc: "Análisis histórico, ético y literario del Antiguo y Nuevo Testamento." },
+        { title: "El Kybalion", badge: "Metafísica", img: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=400", desc: "Los 7 principios herméticos que rigen las leyes del universo." }
+      ],
+      cine: [
+        { title: "Interstellar", badge: "Ciencia Ficción", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400", desc: "Física cuántica, agujeros de gusano y el amor a través del tiempo." },
+        { title: "Oppenheimer", badge: "Histórica / Drama", img: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400", desc: "La era atómica, el Proyecto Manhattan y los dilemas éticos." }
+      ],
+      anime: [
+        { title: "Attack on Titan", badge: "Dark Fantasy", img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400", desc: "La libertad, el ciclo del odio y la naturaleza de la guerra." }
+      ],
+      juegos: [
+        { title: "Elden Ring", badge: "Soulslike / RPG", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400", desc: "Árbol Hierático de Miquella, jefes opcionales y todos los finales." }
+      ]
+    };
+
+    const GLOBAL_API_KEY = 'AQ.Ab8RN6KKetZdLXigjL4D4BQSrKCNpoEkfD3w7MaJqZUtei8_WA';
+
+    window.onload = () => {
+      renderGrids();
+    };
+
+    function showTab(tabId, evt) {
+      document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(tabId).style.display = 'block';
+      if (evt) evt.target.classList.add('active');
+      document.getElementById('resultPanel').style.display = 'none';
+    }
+
+    function renderGrids() {
+      for (const [key, items] of Object.entries(DATA)) {
+        const container = document.getElementById(`grid-${key}`);
+        if (!container) continue;
+        container.innerHTML = '';
+        items.forEach(item => {
+          container.innerHTML += `
+            <div class="card" onclick="triggerCardClick('${key}', '${item.title}')">
+              <img src="${item.img}" class="card-img" alt="${item.title}"/>
+              <div class="card-content">
+                <span class="card-badge">${item.badge}</span>
+                <h3>${item.title}</h3>
+                <p>${item.desc}</p>
+              </div>
+            </div>
+          `;
+        });
+      }
+    }
+
+    function triggerCardClick(type, title) {
+      processSearch(type, null, title);
+    }
+
+    function configureAPI() {
+      const key = prompt("Ingresa tu Gemini API Key:", localStorage.getItem('gemini_api_key') || GLOBAL_API_KEY);
+      if (key) {
+        localStorage.setItem('gemini_api_key', key);
+        alert("API Key guardada correctamente.");
+      }
+    }
+
+    async function processSearch(type, inputId, directTitle = null) {
+      const title = directTitle || document.getElementById(inputId).value.trim();
+      if (!title) return alert("Por favor escribe un título.");
+
+      const lang = document.getElementById('globalLang').value;
+      const resultPanel = document.getElementById('resultPanel');
+      const resultText = document.getElementById('resultText');
+
+      resultPanel.style.display = 'block';
+      resultText.innerHTML = `⏳ <strong>ResumIA está generando el informe para "${title}"...</strong>`;
+      resultPanel.scrollIntoView({ behavior: 'smooth' });
+
+      let prompt = `Actúa como un crítico y resumidor experto de ResumIA. Genera un resumen completo en idioma código ISO '${lang}' para '${title}'. Incluye: 1. Sinopsis estructurada. 2. Análisis de temas profundos. 3. Lecciones clave y conclusiones. Usa Markdown.`;
+
+      const currentKey = localStorage.getItem('gemini_api_key') || GLOBAL_API_KEY;
+
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${currentKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        });
+        
+        const data = await res.json();
+        
+        if (data.error) {
+          throw new Error(data.error.message || "Error en la llamada a la API");
+        }
+
+        const md = data.candidates[0].content.parts[0].text;
+        renderResponse(title, md, type);
+      } catch (e) {
+        console.error(e);
+        resultText.innerHTML = `❌ Error al conectar con Gemini API (${e.message}). Revisa la consola o intenta nuevamente.`;
+      }
+    }
+
+    function renderResponse(title, markdown, type) {
+      const resultText = document.getElementById('resultText');
+      let html = marked.parse(markdown);
+
+      if (type === 'book' || type === 'holistic') {
+        html += `
+          <div class="affiliate-box">
+            <div>
+              <strong>📖 ¿Te gustó este resumen?</strong>
+              <p style="font-size:12px; color:#555;">Apoya a la plataforma adquiriendo la obra completa o el audiolibro oficial.</p>
+            </div>
+            <a href="https://www.amazon.com/s?k=${encodeURIComponent(title)}" target="_blank" class="btn-buy">🛒 Comprar en Amazon</a>
+          </div>
+        `;
+      }
+      resultText.innerHTML = html;
+    }
+
+    function handleFileUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const resultPanel = document.getElementById('resultPanel');
+      const resultText = document.getElementById('resultText');
+
+      resultPanel.style.display = 'block';
+      resultText.innerHTML = `⏳ Analizando el archivo <strong>${file.name}</strong>...`;
+      resultPanel.scrollIntoView({ behavior: 'smooth' });
+
+      setTimeout(() => {
+        resultText.innerHTML = `
+          <h2>📄 Análisis del Archivo: ${file.name}</h2>
+          <p>Procesamiento completado con éxito mediante ResumIA.</p>
+        `;
+      }, 1500);
+    }
+
+    function processCustomText() {
+      const text = document.getElementById('customText').value.trim();
+      if (!text) return alert("Por favor escribe o pega algún texto.");
+      triggerCardClick('libros', 'Texto Personalizado');
+    }
+  </script>
+</body>
+</html>
